@@ -80,8 +80,32 @@ class DatabaseSeeder extends Seeder
 
         // Create customers
         $customers = [
-            ['name' => 'Customer One', 'email' => 'customer1@bleiz.com'],
-            ['name' => 'Customer Two', 'email' => 'customer2@bleiz.com'],
+            [
+                'name' => 'Customer One',
+                'email' => 'customer1@bleiz.com',
+                'address' => '12 Broad Street, Lagos',
+                'phone_number' => '08012345678',
+                'employer' => 'Tech Ltd',
+                'employer_address' => 'Victoria Island, Lagos',
+                'employee_id' => 'EMP001',
+                'bank_name' => 'GTBank',
+                'bank_account_name' => 'Customer One',
+                'bank_account_number' => '0123456789',
+                'bvn' => '2211334455'
+            ],
+            [
+                'name' => 'Customer Two',
+                'email' => 'customer2@bleiz.com',
+                'address' => '20 Marina, Lagos',
+                'phone_number' => '08098765432',
+                'employer' => 'Finance Corp',
+                'employer_address' => 'Ikeja, Lagos',
+                'employee_id' => 'EMP002',
+                'bank_name' => 'Access Bank',
+                'bank_account_name' => 'Customer Two',
+                'bank_account_number' => '9876543210',
+                'bvn' => '9988776655'
+            ],
         ];
 
         foreach ($customers as $data) {
@@ -94,9 +118,18 @@ class DatabaseSeeder extends Seeder
 
             Customer::create([
                 'user_id' => $user->id,
-                'customer_code' => '34/50/FB19/25-' . $user->id,
+                'address' => $data['address'],
+                'phone_number' => $data['phone_number'],
+                'employer' => $data['employer'],
+                'employer_address' => $data['employer_address'],
+                'employee_id' => $data['employee_id'],
+                'bank_name' => $data['bank_name'],
+                'bank_account_name' => $data['bank_account_name'],
+                'bank_account_number' => $data['bank_account_number'],
+                'bvn' => $data['bvn'],
             ]);
         }
+
 
         // Create sample loans and repayment schedules
         $customer = Customer::first();
