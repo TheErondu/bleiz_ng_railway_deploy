@@ -17,6 +17,8 @@ use App\Http\Controllers\Customer\{
     RepaymentScheduleController
 };
 use App\Http\Controllers\OnboardingController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
@@ -27,11 +29,29 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
-Route::get('onboarding/apply',[OnboardingController::class,'apply'])->name('onboarding.apply');
+Route::get('onboarding/apply', [OnboardingController::class, 'apply'])->name('onboarding.apply');
+Route::get('onboarding/register', [OnboardingController::class, 'apply'])->name('onboarding.register.email');
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
 
+    return redirect(route('dashboard'));
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::get('onboarding/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+Route::get('onboarding/register/email/verify', [OnboardingController::class, 'apply'])->name('onboarding.register.email.verify');
+Route::get('onboarding/register/personal-details', [OnboardingController::class, 'apply'])->name('onboarding.register.personal-details');
 Route::middleware(['auth', 'role:admin'])->prefix('admin')
-    ->as('admin.')
     ->group(function () {
+        Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'showAdminDashboard'])->name('admin.dashboard');
         Route::get('loans', [AdminLoanController::class, 'index'])->name('loans.index');
         Route::get('loans/create', [AdminLoanController::class, 'create'])->name('loans.create');
         Route::post('loans', [AdminLoanController::class, 'store'])->name('loans.store');
@@ -44,15 +64,16 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')
         Route::resource('transactions', TransactionController::class)->only(['index', 'create', 'store', 'show']);
         Route::resource('users', AdminUserController::class)->only(['index', 'edit', 'update']);
         Route::resource('repayments', AdminRepaymentController::class);
-         Route::resource('audit', AdminRepaymentController::class);
-              Route::resource('settings', SettingsController::class);
-                Route::resource('requests', AdminRepaymentController::class);
-    Route::post('/capital/inject', [CapitalPoolController::class, 'inject'])
-    ->name('capital.inject');
+        Route::resource('audit', AdminRepaymentController::class);
+        Route::resource('settings', SettingsController::class);
+        Route::resource('requests', AdminRepaymentController::class);
+        Route::post('/capital/inject', [CapitalPoolController::class, 'inject'])
+            ->name('capital.inject');
     });
 
 // CUSTOMER ROUTES
-Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function () {
+Route::middleware(['auth', 'role:customer', 'verified'])->prefix('customer')->group(function () {
+    Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'showCustomerDashboard'])->name('customer.dashboard');
     Route::get('loans', [CustomerLoanController::class, 'index'])->name('customer.loans.index');
     Route::get('loans/apply', [CustomerLoanController::class, 'create'])->name('customer.loans.create');
     Route::post('loans', [CustomerLoanController::class, 'store'])->name('customer.loans.store');

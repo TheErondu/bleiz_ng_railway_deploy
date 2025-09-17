@@ -3,32 +3,21 @@
 @section('content')
     <div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
         <div class="w-full max-w-5xl bg-white p-8 rounded-lg shadow">
-            <form action="" method="POST" id="mainForm" novalidate>
+            <form action="{{route('register')}}" method="POST" id="mainForm" novalidate>
                 @csrf
 
                 {{-- Basic --}}
                 <h2 class="text-lg font-semibold mb-4">Basic</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div>
-                        <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900">First Name <span class="text-red-500">*</span></label>
-                        <input type="text" id="first_name" name="first_name" value="{{ old('first_name') }}" required
-                            class="bg-gray-50 border @error('first_name') border-red-500 @else border-gray-300 @enderror text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
-                        @error('first_name')
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900">First Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}" required
+                            class="bg-gray-50 border @error('name') border-red-500 @else border-gray-300 @enderror text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                        @error('name')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                         <p class="mt-1 text-sm text-red-600 hidden validation-error" id="first_name_error"></p>
                     </div>
-
-                    <div>
-                        <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900">Last Name <span class="text-red-500">*</span></label>
-                        <input type="text" id="last_name" name="last_name" value="{{ old('last_name') }}" required
-                            class="bg-gray-50 border @error('last_name') border-red-500 @else border-gray-300 @enderror text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
-                        @error('last_name')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                        <p class="mt-1 text-sm text-red-600 hidden validation-error" id="last_name_error"></p>
-                    </div>
-
                     <div>
                         <label for="address" class="block mb-2 text-sm font-medium text-gray-900">Home Address <span class="text-red-500">*</span></label>
                         <input type="text" id="address" name="address" value="{{ old('address') }}" required

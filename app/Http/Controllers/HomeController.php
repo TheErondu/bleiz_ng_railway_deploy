@@ -29,10 +29,22 @@ class HomeController extends Controller
 
         $user = Auth::user();
         if ($user->hasRole('admin')) {
-            $stats = DashboardService::getDashboardStats();
-            return view('admin.dashboard', compact('stats'));
+
+            return redirect(route('admin.dashboard'));
         } else {
-            return view('customer.dashboard');
+            return redirect(route('customer.dashboard'));
         }
+    }
+    public function showAdminDashboard()
+    {
+
+        $stats = DashboardService::getDashboardStats();
+        return view('admin.dashboard', compact('stats'));
+    }
+    public function showCustomerDashboard()
+    {
+
+        $stats = DashboardService::getDashboardStats();
+        return view('customer.dashboard', compact('stats'));
     }
 }
