@@ -52,21 +52,21 @@ Route::get('onboarding/register/personal-details', [OnboardingController::class,
 Route::middleware(['auth', 'role:admin'])->prefix('admin')
     ->group(function () {
         Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'showAdminDashboard'])->name('admin.dashboard');
-        Route::get('loans', [AdminLoanController::class, 'index'])->name('loans.index');
-        Route::get('loans/create', [AdminLoanController::class, 'create'])->name('loans.create');
-        Route::post('loans', [AdminLoanController::class, 'store'])->name('loans.store');
-        Route::get('loans/{loan}', [AdminLoanController::class, 'show'])->name('loans.show');
-        Route::get('loans/{loan}/edit', [AdminLoanController::class, 'edit'])->name('loans.edit');
-        Route::put('loans/{loan}', [AdminLoanController::class, 'update'])->name('loans.update');
-        Route::delete('loans/{loan}', [AdminLoanController::class, 'destroy'])->name('loans.destroy');
+        Route::get('loans', [AdminLoanController::class, 'index'])->name('admin.loans.index');
+        Route::get('loans/create', [AdminLoanController::class, 'create'])->name('admin.loans.create');
+        Route::post('loans', [AdminLoanController::class, 'store'])->name('admin.loans.store');
+        Route::get('loans/{loan}', [AdminLoanController::class, 'show'])->name('admin.loans.show');
+        Route::get('loans/{loan}/edit', [AdminLoanController::class, 'edit'])->name('admin.loans.edit');
+        Route::put('loans/{loan}', [AdminLoanController::class, 'update'])->name('admin.loans.update');
+        Route::delete('loans/{loan}', [AdminLoanController::class, 'destroy'])->name('admin.loans.destroy');
 
-        Route::resource('investors', InvestorController::class)->except(['destroy']);
-        Route::resource('transactions', TransactionController::class)->only(['index', 'create', 'store', 'show']);
-        Route::resource('users', AdminUserController::class)->only(['index', 'edit', 'update']);
-        Route::resource('repayments', AdminRepaymentController::class);
-        Route::resource('audit', AdminRepaymentController::class);
-        Route::resource('settings', SettingsController::class);
-        Route::resource('requests', AdminRepaymentController::class);
+        Route::resource('investors', InvestorController::class)->except(['destroy'])->names('admin.investors');
+        Route::resource('transactions', TransactionController::class)->only(['index', 'create', 'store', 'show'])->names('admin.transactions');
+        Route::resource('users', AdminUserController::class)->only(['index', 'edit', 'update'])->names('admin.users');
+        Route::resource('repayments', AdminRepaymentController::class)->names('admin.repayments');
+        Route::resource('audit-logs', AdminRepaymentController::class)->names('admin.audit-logs');
+        Route::resource('settings', SettingsController::class)->names('admin.settings');
+        Route::resource('requests', AdminRepaymentController::class)->names('admin.requests');
         Route::post('/capital/inject', [CapitalPoolController::class, 'inject'])
             ->name('capital.inject');
     });
