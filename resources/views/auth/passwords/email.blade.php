@@ -4,9 +4,7 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
     <div class="w-full max-w-md space-y-8">
         <div class="text-center">
-            <svg class="mx-auto h-12 w-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 4H8m4-8h.01M21 12A9 9 0 113 12a9 9 0 0118 0z" />
-            </svg>
+              @include('components.logo')
             <h2 class="mt-6 text-3xl font-bold text-gray-900">Forgot your password?</h2>
             <p class="mt-2 text-sm text-gray-600">
                 Enter your email address and we’ll send you a reset link.
