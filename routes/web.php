@@ -5,8 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
     RepaymentController as AdminRepaymentController,
     LoanController as AdminLoanController,
+    LoanRequestController as AdminLoanRequestController,
     InvestorController,
-    TransactionController,
+    TransactionController as AdminTransactionController,
     AuditLogController,
     SettingsController,
     UserController as AdminUserController
@@ -17,6 +18,7 @@ use App\Http\Controllers\Customer\{
     RepaymentScheduleController
 };
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\WithdrawalsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,23 +54,36 @@ Route::get('onboarding/register/personal-details', [OnboardingController::class,
 Route::middleware(['auth', 'role:admin'])->prefix('admin')
     ->group(function () {
         Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'showAdminDashboard'])->name('admin.dashboard');
-        Route::get('loans', [AdminLoanController::class, 'index'])->name('admin.loans.index');
-        Route::get('loans/create', [AdminLoanController::class, 'create'])->name('admin.loans.create');
-        Route::post('loans', [AdminLoanController::class, 'store'])->name('admin.loans.store');
-        Route::get('loans/{loan}', [AdminLoanController::class, 'show'])->name('admin.loans.show');
-        Route::get('loans/{loan}/edit', [AdminLoanController::class, 'edit'])->name('admin.loans.edit');
-        Route::put('loans/{loan}', [AdminLoanController::class, 'update'])->name('admin.loans.update');
-        Route::delete('loans/{loan}', [AdminLoanController::class, 'destroy'])->name('admin.loans.destroy');
 
+        // Loans
+        Route::resource('loans', AdminLoanController::class)->names('admin.loans');
+
+        // Investors
         Route::resource('investors', InvestorController::class)->except(['destroy'])->names('admin.investors');
-        Route::resource('transactions', TransactionController::class)->only(['index', 'create', 'store', 'show'])->names('admin.transactions');
+
+        // Transactions
+        Route::resource('transactions', AdminTransactionController::class)->only(['index', 'create', 'store', 'show'])->names('admin.transactions');
+
+        // Users
         Route::resource('users', AdminUserController::class)->only(['index', 'edit', 'update'])->names('admin.users');
+
+        // Repayments
         Route::resource('repayments', AdminRepaymentController::class)->names('admin.repayments');
-        Route::resource('audit-logs', AdminRepaymentController::class)->names('admin.audit-logs');
+
+        // Audit Logs - Fix: Use correct controller
+        Route::resource('audit-logs', AuditLogController::class)->only(['index', 'show'])->names('admin.audit-logs');
+
+        // Settings
         Route::resource('settings', SettingsController::class)->names('admin.settings');
-        Route::resource('requests', AdminRepaymentController::class)->names('admin.requests');
-        Route::post('/capital/inject', [CapitalPoolController::class, 'inject'])
-            ->name('capital.inject');
+
+        // Loan Requests - Fix: Use correct controller
+        Route::resource('requests', AdminLoanRequestController::class)->names('admin.requests');
+
+        // Capital Pool
+        Route::post('/capital/inject', [CapitalPoolController::class, 'inject'])->name('capital.inject');
+
+        // Withdrawals management
+        Route::resource('withdrawals', WithdrawalsController::class)->names('admin.withdrawals');
     });
 
 // CUSTOMER ROUTES
