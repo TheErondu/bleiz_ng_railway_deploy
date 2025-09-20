@@ -18,7 +18,10 @@
       {{-- <link href="{{asset('build/assets/app.css')}}" rel="stylesheet"> --}}
 
     <!-- Vite Assets -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    {{-- To this --}}
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 
     @stack('styles')
 </head>
