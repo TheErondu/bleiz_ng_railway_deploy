@@ -22,9 +22,8 @@
     <link rel="mask-icon" href="https://flowbite-admin-dashboard.vercel.app/safari-pinned-tab.svg" color="#5bbad5">
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css?family=Nunito:400,600,700&display=swap" rel="stylesheet" />
-    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Custom Assets -->
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">

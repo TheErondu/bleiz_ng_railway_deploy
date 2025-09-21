@@ -9,7 +9,7 @@ export default defineConfig({
         }),
     ],
     build: {
-        manifest: true,
+        manifest: 'manifest.json', // This puts it directly in public/build/
         outDir: 'public/build',
         rollupOptions: {
             output: {
@@ -17,7 +17,4 @@ export default defineConfig({
             }
         }
     },
-    css: {
-        postcss: './postcss.config.js',
-    }
 });

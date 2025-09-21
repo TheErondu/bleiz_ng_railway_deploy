@@ -81,4 +81,4 @@ window.Bleiz = {
 // Initialize Flowbite components
 import 'flowbite';
 
-console.log('Bleiz application initialized');
+console.log('Bleiz Credit:\nSmart Loans, Built for Nigerians.\nGet the capital you need without hidden fees or stress.\nFast, secure, and transparent.');
