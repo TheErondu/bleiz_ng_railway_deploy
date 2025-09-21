@@ -80,7 +80,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')
         Route::resource('requests', AdminLoanRequestController::class)->names('admin.requests');
 
         // Capital Pool
-        Route::post('/capital/inject', [CapitalPoolController::class, 'inject'])->name('capital.inject');
+        Route::post('/capital/inject', [CapitalPoolController::class, 'inject'])->name('admin.capital.inject');
 
         // Withdrawals management
         Route::resource('withdrawals', WithdrawalsController::class)->names('admin.withdrawals');

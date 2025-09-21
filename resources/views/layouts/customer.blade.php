@@ -23,7 +23,12 @@
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css?family=Nunito:400,600,700&display=swap" rel="stylesheet" />
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
-    <link href="{{ asset('build/assets/app.css') }}" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+
+    <!-- Custom Assets -->
+    <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
     @stack('styles')
 
 </head>
