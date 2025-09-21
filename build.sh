@@ -21,7 +21,7 @@ echo "✅ Build directory created successfully"
 
 # Install PHP dependencies
 echo "📦 Installing PHP dependencies..."
-composer install --no-dev --optimize-autoloader --no-scripts
+composer install --optimize-autoloader --no-scripts
 
 # Laravel optimization
 echo "⚡ Optimizing Laravel..."
