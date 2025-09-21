@@ -1,7 +1,7 @@
 <?php
 
 // app/Http/Controllers/Api/LoanController.php
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Api\BaseApiController;
 use App\Models\Loan;
