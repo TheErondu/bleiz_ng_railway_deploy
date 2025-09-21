@@ -1,27 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth dark">
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>{{ config('app.name', 'Laravel') }}</title>
-    <meta name="description"
-        content="Smart loans built for Nigerians. Get fast, secure, and transparent loans without hidden fees.">
-    <meta name="keywords" content="loans, nigeria, finance, quick loans, personal loans">
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-      {{-- <link href="{{asset('build/assets/app.css')}}" rel="stylesheet"> --}}
-
-    <!-- Vite Assets -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    @stack('styles')
-</head>
+@include('components.head')
 
 <body class="bg-white text-gray-800 antialiased font-inter">
     <div id="app" class="min-h-screen flex flex-col">
@@ -31,21 +11,7 @@
                 <div class="container mx-auto px-6 py-4">
                     <div class="flex justify-between items-center">
                         <!-- Logo -->
-                        <a href="{{ url('/') }}" class="group flex items-center space-x-3">
-                            <div class="relative">
-                                <div
-                                    class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
-                                    <span class="text-white font-bold text-lg">₦</span>
-                                </div>
-                                <div
-                                    class="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full animate-pulse">
-                                </div>
-                            </div>
-                            <span
-                                class="text-2xl font-black bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                                {{ config('app.name', 'SmartLoan') }}
-                            </span>
-                        </a>
+                       @include('components.logo')
 
                         <!-- Desktop Navigation -->
                         <nav class="hidden md:flex items-center space-x-8">
@@ -148,8 +114,8 @@
                                                     <ul class=" font-medium">
                                                         <li>
                                                             <a href="{{ route('dashboard') }}"
-                                                                class="flex flex-col items-center justify-center gap-1 p-4 text-center rounded-lg hover:bg-blue-100 dark:hover:bg-blue-600">
-                                                                <svg class="w-6 h-6 text-blue-600 dark:text-white"
+                                                                class="flex flex-col items-center justify-center gap-1 p-4 text-center rounded-lg hover:bg-blue-100">
+                                                                <svg class="w-6 h-6 text-blue-600"
                                                                     aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                                     width="24" height="24" fill="currentColor"
                                                                     viewBox="0 0 24 24">
@@ -159,7 +125,7 @@
                                                                 </svg>
 
                                                                 <div
-                                                                    class="text-sm font-medium text-gray-900 dark:text-white">
+                                                                    class="text-sm font-medium text-gray-900">
                                                                     Dashboard</div>
                                                             </a>
                                                         </li>
@@ -172,8 +138,8 @@
                                                         <li>
                                                             <a href="{{ route('logout') }}"
                                                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                                                class="flex flex-col items-center justify-center gap-1 p-4 text-center rounded-lg hover:bg-blue-100 dark:hover:bg-blue-600">
-                                                                <svg class="w-6 h-6 text-green-600 dark:text-white"
+                                                                class="flex flex-col items-center justify-center gap-1 p-4 text-center rounded-lg hover:bg-blue-100">
+                                                                <svg class="w-6 h-6 text-red-600"
                                                                     aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                                     width="24" height="24" fill="none"
                                                                     viewBox="0 0 24 24">
@@ -183,7 +149,7 @@
                                                                 </svg>
 
                                                                 <div
-                                                                    class="text-sm font-medium text-gray-900 dark:text-white">
+                                                                    class="text-sm font-medium text-gray-900  ">
                                                                     Logout</div>
                                                             </a>
                                                         </li>

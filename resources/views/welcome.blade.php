@@ -1,24 +1,17 @@
-@extends('layouts.app')
+@extends('layouts.frontend')
 
 @section('content')
     {{-- Hero Section --}}
-    <section
-        class="relative min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-white overflow-hidden">
-        {{-- Animated Background --}}
-        <div class="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-20"></div>
-        <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/10 to-gray-900/40"></div>
+    <section style="background-image: url({{ asset('images/hero-bg.webp')}})" class="relative min-h-screen bg-contain bg-center from-gray-900 via-blue-900 to-gray-900 text-white overflow-hidden">
 
-        {{-- Floating Elements --}}
-        <div class="absolute top-20 left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-xl animate-pulse"></div>
-        <div class="absolute bottom-32 right-16 w-48 h-48 bg-purple-500/10 rounded-full blur-2xl animate-pulse delay-1000">
-        </div>
-        <div class="absolute top-1/2 left-1/4 w-24 h-24 bg-cyan-400/10 rounded-full blur-lg animate-bounce delay-500"></div>
+         <!-- Overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
 
         <div class="relative z-10 container mx-auto px-6 py-32 min-h-screen flex items-center">
             <div class="w-full text-center">
                 <div class="animate-fade-in-up">
                     <h1
-                        class="text-5xl md:text-7xl font-black mb-6 bg-gradient-to-r from-white via-blue-200 to-cyan-300 bg-clip-text text-transparent leading-tight">
+                        class="text-5xl md:text-7xl font-black mb-6 bg-gradient-to-r from-white via-white-200 to-white bg-clip-text text-transparent leading-tight">
                         Smart Loans,<br>
                         <span class="text-4xl md:text-6xl">Built for Nigerians</span>
                     </h1>
@@ -48,7 +41,7 @@
                 </div>
 
                 {{-- Trust Indicators --}}
-                <div class="animate-fade-in-up delay-700 flex justify-center items-center gap-8 text-sm text-gray-400">
+                <div class="animate-fade-in-up delay-700 flex justify-center items-center gap-8 text-sm text-gray-200">
                     <div class="flex items-center gap-2">
                         <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                         <span>100% Secure</span>
