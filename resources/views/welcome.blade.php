@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- Hero Section --}}
-    <section style="background-image: url({{ asset('images/hero-bg.webp')}})" class="relative min-h-screen bg-contain bg-center from-gray-900 via-blue-900 to-gray-900 text-white overflow-hidden">
+    <section style="background-image: url({{ asset('images/hero-bg.webp')}})" class="relative min-h-screen bg-cover bg-center from-gray-900 via-blue-900 to-gray-900 text-white overflow-hidden">
 
          <!-- Overlay -->
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
