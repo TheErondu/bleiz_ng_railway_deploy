@@ -53,7 +53,7 @@ class Loan extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function schedules()
+    public function repaymentSchedules()
     {
         return $this->hasMany(RepaymentSchedule::class);
     }

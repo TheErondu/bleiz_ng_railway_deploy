@@ -115,7 +115,7 @@ class LoanController extends Controller
      */
     public function show(Loan $loan)
     {
-        $loan->load('customer.user', 'schedules', 'repayments');
+        $loan->load('customer.user', 'repaymentSchedules', 'repayments');
         return view('admin.loans.show', compact('loan'));
     }
 

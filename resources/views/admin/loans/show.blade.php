@@ -43,6 +43,14 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400">Status</p>
                     <p class="text-gray-900 dark:text-white">{{ ucfirst($loan->status) }}</p>
                 </div>
+                 <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Repayment Cycle</p>
+                    <p class="text-gray-900 dark:text-white">{{ ucfirst($loan->repayment_cycle) }}</p>
+                </div>
+                 <div>
+                    <p style="padding-bottom: 10px;" class="text-sm text-gray-500 dark:text-gray-400">Loan Reference</p>
+                   <button type="button" class="py-2.5 text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Approve loan</button>
+                </div>
                 <div>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Start Date</p>
                     <p class="text-gray-900 dark:text-white">{{ $loan->start_date->format('M d, Y') }}</p>
@@ -51,10 +59,7 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400">End Date</p>
                     <p class="text-gray-900 dark:text-white">{{ $loan->end_date->format('M d, Y') }}</p>
                 </div>
-                <div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Repayment Cycle</p>
-                    <p class="text-gray-900 dark:text-white">{{ ucfirst($loan->repayment_cycle) }}</p>
-                </div>
+
             </div>
 
             <!-- Repayment Schedules -->
@@ -70,7 +75,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($loan->schedules as $schedule)
+                        @forelse($loan->repaymentSchedules as $schedule)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td class="px-6 py-4">{{ $schedule->due_date->format('M d, Y') }}</td>
                                 <td class="px-6 py-4">{{ format_currency($schedule->amount_due) }}</td>

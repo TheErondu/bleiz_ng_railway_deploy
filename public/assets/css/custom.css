@@ -1,3 +1,132 @@
-.logo-red {
-    color: #c52f37;
+/* Bleiz Custom Styles */
+:root {
+    --bleiz-primary: #1a365d;
+    --bleiz-secondary: #2d3748;
+    --bleiz-accent: #38a169;
+    --bleiz-success: #48bb78;
+    --bleiz-warning: #ed8936;
+    --bleiz-error: #f56565;
+}
+
+/* Custom Components */
+.bleiz-card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow;
+}
+
+.bleiz-button-primary {
+    @apply px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-105;
+}
+
+.bleiz-button-secondary {
+    @apply px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors;
+}
+
+.bleiz-input {
+    @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all;
+}
+
+.bleiz-table {
+    @apply w-full text-sm text-left text-gray-500 dark:text-gray-400;
+}
+
+.bleiz-table thead {
+    @apply text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400;
+}
+
+.bleiz-table th {
+    @apply px-6 py-3;
+}
+
+.bleiz-table td {
+    @apply px-6 py-4 whitespace-nowrap;
+}
+
+.bleiz-table tbody tr {
+    @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
+}
+
+/* Status badges */
+.status-badge {
+    @apply px-2 py-1 text-xs font-medium rounded-full;
+}
+
+.status-ongoing {
+    @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300;
+}
+
+.status-completed {
+    @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300;
+}
+
+.status-overdue {
+    @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300;
+}
+
+.status-pending {
+    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300;
+}
+
+/* Custom animations */
+.slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+    .bleiz-card {
+        @apply p-4;
+    }
+
+    .bleiz-table th,
+    .bleiz-table td {
+        @apply px-3 py-2;
+    }
 }
