@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -76,6 +77,16 @@ class Handler extends ExceptionHandler
         return parent::render($request, $e);
     }
 
+    protected function renderHttpException(HttpExceptionInterface $e)
+    {
+        if ($e->getStatusCode() == 419) {
+            return redirect()->guest(route('login'))
+                ->with('status', 'Session expired. Please login again.');
+        }
+
+        return parent::renderHttpException($e);
+    }
+
     /**
      * Handle API exceptions with consistent format.
      */
@@ -130,8 +141,15 @@ class Handler extends ExceptionHandler
     protected function isFinancialOperation(Throwable $e): bool
     {
         $financialKeywords = [
-            'loan', 'payment', 'repayment', 'capital', 'investor',
-            'withdrawal', 'transaction', 'balance', 'fund'
+            'loan',
+            'payment',
+            'repayment',
+            'capital',
+            'investor',
+            'withdrawal',
+            'transaction',
+            'balance',
+            'fund'
         ];
 
         $trace = strtolower($e->getTraceAsString());
