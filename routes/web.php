@@ -56,7 +56,16 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')
         Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'showAdminDashboard'])->name('admin.dashboard');
 
         // Loans
-        Route::resource('loans', AdminLoanController::class)->names('admin.loans');
+         Route::prefix('loans')->name('admin.loans.')->group(function () {
+        Route::get('/', [AdminLoanController::class, 'index'])->name('index');
+        Route::get('/{loan}', [AdminLoanController::class, 'show'])->name('show');
+
+        // Approve loan
+        Route::put('/{loan}/approve', [AdminLoanController::class, 'approve'])->name('approve');
+
+        // Reject loan
+        Route::put('/{loan}/reject', [AdminLoanController::class, 'reject'])->name('reject');
+    });
 
         // Investors
         Route::resource('investors', InvestorController::class)->except(['destroy'])->names('admin.investors');
