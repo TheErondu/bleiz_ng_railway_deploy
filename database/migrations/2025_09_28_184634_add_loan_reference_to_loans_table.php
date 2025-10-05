@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('loans', function (Blueprint $table) {
-            $table->text('reference')->nullable()->unique();
+            $table->string('reference', 255)->nullable()->unique();
         });
     }
 
@@ -22,7 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('loans', function (Blueprint $table) {
-            //
+            $table->dropUnique('loans_reference_unique');
+            $table->dropColumn('reference');
         });
     }
 };
