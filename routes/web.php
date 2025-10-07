@@ -22,9 +22,21 @@ use App\Http\Controllers\WithdrawalsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 Auth::routes();
+Route::get('/test-mail', function () {
+    try {
+        Mail::raw('Hello Erondu! This is a test email from your Laravel Mailgun setup.', function ($message) {
+            $message->to('erone007@gmail.com')
+                    ->subject('Mailgun Test - Laravel');
+        });
 
+        return '✅ Test email sent successfully to erone007@gmail.com';
+    } catch (\Exception $e) {
+        return '❌ Mail failed: ' . $e->getMessage();
+    }
+});
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
