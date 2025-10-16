@@ -22,6 +22,10 @@ class Repayment extends Model
         'repayment_schedule_id', 'amount', 'paid_on', 'payment_method', 'received_by'
     ];
 
+    protected $casts = [
+        'paid_on' => 'date',
+    ];
+
     public function schedule()
     {
         return $this->belongsTo(RepaymentSchedule::class, 'repayment_schedule_id');

@@ -1,15 +1,37 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
-    @include('components.head')
+@include('components.head')
 
 <body class="bg-gray-50 dark:bg-gray-900">
     @include('components.customer.navbar')
     @include('components.customer.sidebar')
+
     {{-- Page Content --}}
     <main>
+      @include('components.spacer',['direction'=>'vertical','size'=>'6'])
         <div style="padding:28px;" class="p-4 sm:ml-64">
+            @if (session('error'))
+                @include('components.toast_message', ['type' => 'error', 'message' => session('error')])
+            @endif
 
+            @if (session('info'))
+                @include('components.toast_message', ['type' => 'info', 'message' => session('info')])
+            @endif
+
+            @if (session('warning'))
+                @include('components.toast_message', [
+                    'type' => 'warning',
+                    'message' => session('warning'),
+                ])
+            @endif
+
+            @if (session('success'))
+                @include('components.toast_message', [
+                    'type' => 'success',
+                    'message' => session('success'),
+                ])
+            @endif
             @yield('content')
 
         </div>

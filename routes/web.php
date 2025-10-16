@@ -25,18 +25,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 Auth::routes();
-Route::get('/test-mail', function () {
-    try {
-        Mail::raw('Hello Erondu! This is a test email from your Laravel Mailgun setup.', function ($message) {
-            $message->to('erone007@gmail.com')
-                    ->subject('Mailgun Test - Laravel');
-        });
+// Route::get('/test-mail', function () {
+//     try {
+//         Mail::raw('Hello Erondu! This is a test email from your Laravel Mailgun setup.', function ($message) {
+//             $message->to('erone007@gmail.com')
+//                     ->subject('Mailgun Test - Laravel');
+//         });
 
-        return '✅ Test email sent successfully to erone007@gmail.com';
-    } catch (\Exception $e) {
-        return '❌ Mail failed: ' . $e->getMessage();
-    }
-});
+//         return '✅ Test email sent successfully to erone007@gmail.com';
+//     } catch (\Exception $e) {
+//         return '❌ Mail failed: ' . $e->getMessage();
+//     }
+// });
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -48,7 +48,7 @@ Route::get('onboarding/register', [OnboardingController::class, 'apply'])->name(
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
-    return redirect(route('dashboard'));
+    return redirect(route('dashboard'))->with('success', 'Email verified successfully!');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::get('onboarding/email/verify', function () {
