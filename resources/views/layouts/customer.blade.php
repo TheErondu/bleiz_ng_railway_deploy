@@ -38,6 +38,7 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         //Update the theme based on the user defined setting in local storage
         document.addEventListener('DOMContentLoaded', function() {

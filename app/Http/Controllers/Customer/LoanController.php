@@ -80,21 +80,13 @@ class LoanController extends Controller
                 $customer = $user->customer;
             }
 
-            // Calculate interest rate based on tenure
-            $interestRates = [
-                3 => 24,
-                6 => 22,
-                9 => 20,
-                12 => 18,
-                18 => 16,
-                24 => 15
-            ];
+            $interestRate = 5.0; // Fixed interest rate for all loans
 
-            $interestRate = $interestRates[$validated['tenure_months']] ?? 20;
+            $tenureMonths = (int) $validated['tenure_months'];
 
             // Calculate dates
             $startDate = now();
-            $endDate = $startDate->copy()->addMonths($validated['tenure_months']);
+            $endDate = $startDate->copy()->addMonths($tenureMonths);
 
             // Create loan application
             $loan = Loan::create([
@@ -159,4 +151,5 @@ class LoanController extends Controller
     {
         return ($principal * $interestRate / 100) * ($tenureMonths / 12);
     }
+
 }

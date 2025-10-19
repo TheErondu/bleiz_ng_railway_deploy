@@ -8,6 +8,7 @@ use App\Models\Loan;
 use App\Services\CapitalPoolService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class LoanController extends Controller
@@ -147,5 +148,166 @@ class LoanController extends Controller
         }
 
         \App\Models\RepaymentSchedule::insert($schedules);
+    }
+    /**
+     * Approve a pending loan application.
+     *
+     * @param \App\Models\Loan $loan
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function approve(Loan $loan)
+    {
+        // Check if loan is already approved
+        if ($loan->status !== 'pending') {
+            return back()->with('error', 'This loan has already been ' . $loan->status . '.');
+        }
+
+        try {
+            // Check if capital pool has sufficient funds
+            $pool = $this->capitalPoolService->getPool();
+            if (!$pool || $pool->available_amount < $loan->principal) {
+                return back()->with('error', 'Insufficient funds in capital pool. Available: ' . format_currency($pool->available_amount ?? 0));
+            }
+
+            // Generate unique reference number
+            $referenceNumber = $this->generateLoanReference($loan);
+
+            // Update loan status
+            $loan->update([
+                'status' => 'ongoing',
+                'approved_by' => auth()->id(),
+                'approved_at' => now(),
+                'disbursed_at' => now(),
+                'loan_terms' => json_encode([
+                    'reference' => $referenceNumber,
+                    'approved_date' => now()->toDateString(),
+                    'approved_by' => auth()->user()->name,
+                ]),
+            ]);
+
+            // Generate repayment schedules
+            $this->generateRepaymentSchedules($loan);
+
+            // Record transaction for loan disbursement
+            \App\Models\Transaction::create([
+                'type' => 'loan_disbursement',
+                'reference_id' => $referenceNumber,
+                'amount' => $loan->principal,
+                'description' => "Loan disbursement for loan #{$loan->id} - {$loan->customer->user->name}",
+                'date' => now()->toDateString(),
+                'user_id' => $loan->customer->user_id,
+            ]);
+
+            // Update capital pool - disburse loan amount
+            $this->capitalPoolService->disburseLoan($loan->principal);
+
+            // Log activity
+            activity('loan')
+                ->performedOn($loan)
+                ->causedBy(auth()->user())
+                ->log("Approved loan ID {$loan->id} with reference {$referenceNumber} for customer ID {$loan->customer_id} with principal " . format_currency($loan->principal));
+
+            return redirect()->route('admin.loans.show', $loan)
+                ->with('success', "Loan #{$loan->id} has been approved successfully! Reference: {$referenceNumber}");
+        } catch (\Exception $e) {
+            Log::error('Loan approval failed: ' . $e->getMessage(), [
+                'loan_id' => $loan->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return back()->with('error', 'Failed to approve loan. Please try again or contact support.');
+        }
+    }
+
+    /**
+     * Generate unique loan reference number.
+     * Format: customer_id/interest_with_zero/3-letter-month/day/2-digit-year
+     * Example: 86/60/JAN/09/25
+     *
+     * @param \App\Models\Loan $loan
+     * @return string
+     */
+    private function generateLoanReference($loan)
+    {
+        $customerId = $loan->customer_id;
+
+        // Format interest rate with zero padding (e.g., 5% becomes 50, 15% becomes 150)
+        $interestWithZero = str_pad((int)($loan->interest_rate * 10), 2, '0', STR_PAD_LEFT);
+
+        // Get current date components
+        $month = strtoupper(now()->format('M')); // JAN, FEB, MAR, etc.
+        $day = now()->format('d'); // 01-31
+        $year = now()->format('y'); // 25 for 2025
+
+        // Build reference: customer_id/interest_with_zero/month/day/year
+        $reference = "{$customerId}/{$interestWithZero}/{$month}/{$day}/{$year}";
+
+        // Check for uniqueness - if reference exists, append a counter
+        $counter = 1;
+        $originalReference = $reference;
+
+        while (\App\Models\Transaction::where('reference_id', $reference)->exists()) {
+            $reference = "{$originalReference}-{$counter}";
+            $counter++;
+        }
+
+        return $reference;
+    }
+
+    /**
+     * Reject a loan application
+     */
+    public function reject(Request $request, Loan $loan)
+    {
+        // Check if user has permission
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Check if loan can be rejected
+        if ($loan->status !== 'pending') {
+            return back()->withErrors([
+                'error' => 'Only pending loans can be rejected.'
+            ]);
+        }
+
+        $validated = $request->validate([
+            'rejection_reason' => 'required|string|min:10|max:500',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $loan->update([
+                'status' => 'defaulted', // Or create a 'rejected' status
+                'notes' => json_encode(array_merge(
+                    json_decode($loan->notes, true) ?? [],
+                    [
+                        'rejection_reason' => $validated['rejection_reason'],
+                        'rejected_by' => auth()->user()->name,
+                        'rejected_at' => now()->toDateString(),
+                    ]
+                )),
+            ]);
+
+            // Log activity
+            activity('loan')
+                ->performedOn($loan)
+                ->causedBy(auth()->user())
+                ->withProperties(['reason' => $validated['rejection_reason']])
+                ->log('Loan rejected');
+
+            DB::commit();
+
+            return redirect()->route('admin.loans.index')
+                ->with('success', "Loan #{$loan->id} has been rejected.");
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return back()->withErrors([
+                'error' => 'Failed to reject loan. Please try again.'
+            ]);
+        }
     }
 }

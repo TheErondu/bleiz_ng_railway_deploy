@@ -54,17 +54,7 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        $banks = [];
-
-        try {
-            $json = file_get_contents('https://raw.githubusercontent.com/TheErondu/all-nigerian-banks/refs/heads/master/list.json');
-            $banks = json_decode($json, true);
-        } catch (\Exception $e) {
-            // Optionally handle the error or log it
-            $banks = [];
-        }
-
-        return view('auth.register_pasword', compact('banks'));
+        return view('auth.register_pasword');
     }
 
     public function register(Request $request)
@@ -80,8 +70,8 @@ class RegisterController extends Controller
         }
 
         return $request->wantsJson()
-                    ? new JsonResponse([], 201)
-                    : redirect($this->redirectPath());
+            ? new JsonResponse([], 201)
+            : redirect($this->redirectPath());
     }
 
 
@@ -126,8 +116,6 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
-         $user->assignRole('customer');
+        $user->assignRole('customer');
     }
-
-
 }

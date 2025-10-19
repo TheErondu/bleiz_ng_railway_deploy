@@ -32,20 +32,11 @@
                         <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Customer Information</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="customer_id_{{ $loan->id }}"
+                                <label for="customer_id_{{ $loan->customer_id }}"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Customer <span class="text-red-500">*</span>
+                                    {{$loan->customer->user->name}} <span class="text-red-500">*</span>
                                 </label>
-                                <select id="customer_id_{{ $loan->id }}" name="customer_id" required
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <option value="">Select Customer</option>
-                                    @foreach($customers ?? [] as $customer)
-                                        <option value="{{ $customer->id }}"
-                                            {{ old('customer_id', $loan->customer_id) == $customer->id ? 'selected' : '' }}>
-                                            {{ $customer->user->name }} ({{ $customer->user->email }})
-                                        </option>
-                                    @endforeach
-                                </select>
+
                                 @error('customer_id')
                                     <p class="mt-1 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
                                 @enderror

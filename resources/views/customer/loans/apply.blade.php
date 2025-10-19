@@ -1,3 +1,166 @@
+@php
+    $bankList = getbankList();
+@endphp
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+/* Select2 Dark Mode Compatible Styles */
+
+/* Container */
+.select2-container--default .select2-selection--single {
+  background-color: rgb(249 250 251); /* Light mode bg-gray-50 */
+  border: 1px solid rgb(209 213 219); /* Light mode border-gray-300 */
+  border-radius: 0.5rem;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Dark mode container */
+.dark .select2-container--default .select2-selection--single {
+  background-color: rgb(75 85 99); /* Dark mode bg-gray-600 */
+  border-color: rgb(107 114 128); /* Dark mode border-gray-500 */
+}
+
+/* Selected text */
+.select2-container--default .select2-selection__rendered {
+  color: rgb(17 24 39); /* Light mode text-gray-900 */
+  font-size: 0.875rem;
+  line-height: 42px;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+}
+
+/* Dark mode selected text */
+.dark .select2-container--default .select2-selection__rendered {
+  color: rgb(255 255 255); /* Dark mode text-white */
+}
+
+/* Placeholder */
+.select2-container--default .select2-selection__placeholder {
+  color: rgb(156 163 175); /* Light mode text-gray-400 */
+}
+
+/* Dark mode placeholder */
+.dark .select2-container--default .select2-selection__placeholder {
+  color: rgb(156 163 175); /* Dark mode placeholder-gray-400 */
+}
+
+/* Arrow */
+.select2-container--default .select2-selection__arrow {
+  height: 100%;
+  right: 0.75rem;
+}
+
+/* Dropdown */
+.select2-container--default .select2-dropdown {
+  background-color: rgb(255 255 255); /* Light mode bg-white */
+  border: 1px solid rgb(209 213 219); /* Light mode border-gray-300 */
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode dropdown */
+.dark .select2-container--default .select2-dropdown {
+  background-color: rgb(55 65 81); /* Dark mode bg-gray-700 */
+  border-color: rgb(75 85 99); /* Dark mode border-gray-600 */
+}
+
+/* Search field */
+.select2-container--default .select2-search--dropdown .select2-search__field {
+  background-color: rgb(249 250 251); /* Light mode bg-gray-50 */
+  border: 1px solid rgb(209 213 219); /* Light mode border-gray-300 */
+  color: rgb(17 24 39); /* Light mode text-gray-900 */
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* Dark mode search field */
+.dark .select2-container--default .select2-search--dropdown .select2-search__field {
+  background-color: rgb(75 85 99); /* Dark mode bg-gray-600 */
+  border-color: rgb(107 114 128); /* Dark mode border-gray-500 */
+  color: rgb(255 255 255); /* Dark mode text-white */
+}
+
+/* Search field placeholder */
+.select2-container--default .select2-search--dropdown .select2-search__field::placeholder {
+  color: rgb(156 163 175); /* Light mode placeholder-gray-400 */
+}
+
+/* Options */
+.select2-container--default .select2-results__option {
+  color: rgb(17 24 39); /* Light mode text-gray-900 */
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Dark mode options */
+.dark .select2-container--default .select2-results__option {
+  color: rgb(255 255 255); /* Dark mode text-white */
+}
+
+/* Highlighted option */
+.select2-container--default .select2-results__option--highlighted {
+  background-color: rgb(59 130 246); /* Light mode bg-blue-500 */
+  color: rgb(255 255 255); /* text-white */
+}
+
+/* Dark mode highlighted option */
+.dark .select2-container--default .select2-results__option--highlighted {
+  background-color: rgb(37 99 235); /* Dark mode bg-blue-600 */
+  color: rgb(255 255 255); /* text-white */
+}
+
+/* Selected option */
+.select2-container--default .select2-results__option[aria-selected="true"] {
+  background-color: rgb(239 246 255); /* Light mode bg-blue-50 */
+  color: rgb(30 64 175); /* Light mode text-blue-900 */
+}
+
+/* Dark mode selected option */
+.dark .select2-container--default .select2-results__option[aria-selected="true"] {
+  background-color: rgba(59, 130, 246, 0.2); /* Dark mode bg-blue-900/20 */
+  color: rgb(147 197 253); /* Dark mode text-blue-300 */
+}
+
+/* No results message */
+.select2-container--default .select2-results__option--disabled {
+  color: rgb(156 163 175); /* Light mode text-gray-400 */
+}
+
+/* Dark mode no results message */
+.dark .select2-container--default .select2-results__option--disabled {
+  color: rgb(156 163 175); /* Dark mode text-gray-400 */
+}
+
+/* Focus state */
+.select2-container--default.select2-container--focus .select2-selection--single,
+.select2-container--default.select2-container--open .select2-selection--single {
+  border-color: rgb(59 130 246); /* Light mode border-blue-500 */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Dark mode focus state */
+.dark .select2-container--default.select2-container--focus .select2-selection--single,
+.dark .select2-container--default.select2-container--open .select2-selection--single {
+  border-color: rgb(96 165 250); /* Dark mode border-blue-400 */
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+/* Hover effects */
+.select2-container--default .select2-selection--single:hover {
+  border-color: rgb(156 163 175); /* Light mode hover border-gray-400 */
+}
+
+/* Dark mode hover effects */
+.dark .select2-container--default .select2-selection--single:hover {
+  border-color: rgb(156 163 175); /* Dark mode hover border-gray-400 */
+}
+</style>
+@endpush
 {{-- Loan Application Modal --}}
 <div id="apply-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-4xl max-h-full">
@@ -70,23 +233,14 @@
                                 <div>
                                     <label for="bank_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bank <span class="text-red-500">*</span></label>
                                     <select id="bank_name" name="bank_name" required
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white select2">
                                         <option value="">Select your bank</option>
-                                        <option value="Access Bank">Access Bank</option>
-                                        <option value="First Bank of Nigeria">First Bank of Nigeria</option>
-                                        <option value="Zenith Bank">Zenith Bank</option>
-                                        <option value="UBA">United Bank for Africa</option>
-                                        <option value="GTBank">Guaranty Trust Bank</option>
-                                        <option value="Fidelity Bank">Fidelity Bank</option>
-                                        <option value="FCMB">First City Monument Bank</option>
-                                        <option value="Sterling Bank">Sterling Bank</option>
-                                        <option value="Union Bank">Union Bank</option>
-                                        <option value="Wema Bank">Wema Bank</option>
-                                        <option value="Ecobank">Ecobank</option>
-                                        <option value="Stanbic IBTC">Stanbic IBTC</option>
-                                        <option value="Heritage Bank">Heritage Bank</option>
-                                        <option value="Keystone Bank">Keystone Bank</option>
-                                        <option value="Polaris Bank">Polaris Bank</option>
+                                        @forelse ($bankList as $bank)
+                                            <option value="{{ $bank['bank_name'] }}">{{ $bank['bank_name'] }}</option>
+
+                                        @empty
+                                            <option value="">No banks available</option>
+                                        @endforelse
                                     </select>
                                 </div>
                                 <div>
@@ -161,7 +315,7 @@
                                 placeholder="Your monthly salary">
                         </div>
 
-                        {{-- Loan Calculator Preview --}}
+                        {{-- Loan Calculator Preview
                         <div id="loanPreview" class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6 hidden">
                             <h5 class="text-md font-semibold text-blue-900 dark:text-blue-100 mb-3">Loan Preview</h5>
                             <div class="grid grid-cols-2 gap-4 text-sm">
@@ -182,7 +336,7 @@
                                     <span id="previewTotal" class="font-semibold text-blue-900 dark:text-blue-100 float-right">₦0</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="mb-6">
                             <label class="flex items-center">
@@ -282,11 +436,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (phoneInput) {
         phoneInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
-            if (value.startsWith('0')) {
-                value = '+234' + value.substring(1);
-            } else if (!value.startsWith('+234') && value.length > 0) {
-                value = '+234' + value;
-            }
+
             e.target.value = value;
         });
     }
@@ -328,3 +478,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+    $('.select2').select2(
+        {
+            width: '100%'
+        }
+    );
+});
+</script>
+@endpush
