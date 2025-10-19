@@ -47,8 +47,8 @@ Route::get('onboarding/apply', [OnboardingController::class, 'apply'])->name('on
 Route::get('onboarding/register', [OnboardingController::class, 'apply'])->name('onboarding.register.email');
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-
-    return redirect(route('dashboard'))->with('success', 'Email verified successfully!');
+    flash()->success('Email verified successfully!');
+    return redirect(route('dashboard'));
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::get('onboarding/email/verify', function () {
@@ -68,16 +68,16 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')
         Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'showAdminDashboard'])->name('admin.dashboard');
 
         // Loans
-         Route::prefix('loans')->name('admin.loans.')->group(function () {
-        Route::get('/', [AdminLoanController::class, 'index'])->name('index');
-        Route::get('/{loan}', [AdminLoanController::class, 'show'])->name('show');
+        Route::prefix('loans')->name('admin.loans.')->group(function () {
+            Route::get('/', [AdminLoanController::class, 'index'])->name('index');
+            Route::get('/{loan}', [AdminLoanController::class, 'show'])->name('show');
 
-        // Approve loan
-        Route::put('/{loan}/approve', [AdminLoanController::class, 'approve'])->name('approve');
+            // Approve loan
+            Route::put('/{loan}/approve', [AdminLoanController::class, 'approve'])->name('approve');
 
-        // Reject loan
-        Route::put('/{loan}/reject', [AdminLoanController::class, 'reject'])->name('reject');
-    });
+            // Reject loan
+            Route::put('/{loan}/reject', [AdminLoanController::class, 'reject'])->name('reject');
+        });
 
         // Investors
         Route::resource('investors', InvestorController::class)->except(['destroy'])->names('admin.investors');
