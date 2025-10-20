@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Loan;
+use App\Notifications\LoanApproved;
 use App\Services\CapitalPoolService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -211,7 +212,7 @@ class LoanController extends Controller
                 ->causedBy(auth()->user())
                 ->log("Approved loan ID {$loan->id} with reference {$referenceNumber} for customer ID {$loan->customer_id} with principal " . format_currency($loan->principal));
             // Notify customer
-            $loan->customer->user->notify(new \App\Notifications\LoanApproved($loan, $referenceNumber));
+            $loan->customer->user->notify(new LoanApproved($loan, $referenceNumber));
 
             return redirect()->route('admin.loans.show', $loan)
                 ->with('success', "Loan #{$loan->id} has been approved successfully! Reference: {$referenceNumber}");
