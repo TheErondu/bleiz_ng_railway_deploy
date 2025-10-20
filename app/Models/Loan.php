@@ -23,7 +23,17 @@ class Loan extends Model
         'repaid_principal',
         'overdue_payment',
         'total_obligation',
-        'current_interest'
+        'current_interest',
+        'total_fees',
+        'penalty_amount',
+        'grace_period_days',
+        'notes',
+        'loan_terms',
+        'approved_by',
+        'approved_at',
+        'disbursed_at',
+        'reference'
+
     ];
 
     protected $casts = [
@@ -36,7 +46,14 @@ class Loan extends Model
         'repaid_principal' => 'float',
         'overdue_payment' => 'float',
         'total_obligation' => 'float',
-        'current_interest' => 'float'
+        'current_interest' => 'float',
+        'total_fees' => 'float',
+        'penalty_amount' => 'float',
+        'grace_period_days' => 'integer',
+        'notes' => 'array',
+        'loan_terms' => 'array',
+        'approved_at' => 'datetime',
+        'disbursed_at' => 'datetime',
     ];
 
     public function getActivitylogOptions(): LogOptions

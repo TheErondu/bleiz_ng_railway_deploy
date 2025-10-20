@@ -90,7 +90,8 @@ class LoanController extends Controller
                 'repaid_principal' => 0,
                 'overdue_payment' => 0,
                 'total_obligation' => $totalObligation,
-                'current_interest' => $currentInterest
+                'current_interest' => $currentInterest,
+
             ]);
 
             // Generate repayment schedules
@@ -100,6 +101,7 @@ class LoanController extends Controller
             $this->capitalPoolService->disburseLoan($principal);
 
             activity()->log("Created loan ID {$loan->id} for customer ID {$request->customer_id} with principal " . format_currency($principal));
+
 
             return redirect()->route('loans.index')->with('success', 'Loan created successfully.');
         } catch (\Exception $e) {
@@ -178,6 +180,8 @@ class LoanController extends Controller
                 'approved_by' => auth()->id(),
                 'approved_at' => now(),
                 'disbursed_at' => now(),
+                'reference' => $referenceNumber,
+                'approved_by' => auth()->user()->id,
                 'loan_terms' => json_encode([
                     'reference' => $referenceNumber,
                     'approved_date' => now()->toDateString(),
@@ -206,6 +210,8 @@ class LoanController extends Controller
                 ->performedOn($loan)
                 ->causedBy(auth()->user())
                 ->log("Approved loan ID {$loan->id} with reference {$referenceNumber} for customer ID {$loan->customer_id} with principal " . format_currency($loan->principal));
+            // Notify customer
+            $loan->customer->user->notify(new \App\Notifications\LoanApproved($loan, $referenceNumber));
 
             return redirect()->route('admin.loans.show', $loan)
                 ->with('success', "Loan #{$loan->id} has been approved successfully! Reference: {$referenceNumber}");
